@@ -14,10 +14,11 @@ test('Ship has correct designated length.', () => {
 
 test('Function gotHit increases one hit of the ship.', () => {
   let myShip = new Ship(4);
-  let initialHit = myShip.hit;
+  expect(myShip.hit).toEqual(0);
   myShip.gotHit();
-  let newHit = myShip.hit;
-  expect(newHit - initialHit).toEqual(1);
+  expect(myShip.hit).toEqual(1);
+  myShip.gotHit();
+  expect(myShip.hit).toEqual(2);
 });
 
 test('Function isSunk reports correct status of the ship.', () => {
@@ -28,4 +29,3 @@ test('Function isSunk reports correct status of the ship.', () => {
   myShip.gotHit();
   expect(myShip.isSunk()).toBeTruthy();
 });
-
