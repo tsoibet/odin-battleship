@@ -27,6 +27,9 @@ export default class Gameboard {
   }
 
   placeShip(length, direction, [x, y]) {
+    if (!canPlaceShip(length, direction, [x, y], this)) {
+      throw new Error('There is not enough space to place the ship!');
+    }
     let ship = new Ship(length);
     if (direction === 'horizontal') {
       for (let i = y + length - 1; i >= y; i--) {
@@ -55,4 +58,30 @@ export default class Gameboard {
     }
     return true;
   }
+}
+
+function canPlaceShip(length, direction, [x, y], self) {
+  if (x < 0 || x > 9 || y < 0 || y > 9) {
+    return false;
+  }
+  if (direction === 'horizontal') {
+    if (y + length - 1 > 9) {
+      return false;
+    }
+    for (let i = y + length - 1; i >= y; i--) {
+      if (self.map[x][i]['ship']) {
+        return false;
+      }
+    }
+  } else {
+    if (x + length - 1 > 9) {
+        return false;
+    }
+    for (let i = x + length - 1; i >= x; i--) {
+      if (self.map[i][y]['ship']) {
+        return false;
+      }
+    }
+  }
+  return true;
 }
