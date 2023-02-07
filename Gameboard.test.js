@@ -54,6 +54,22 @@ describe('Function placeShip', () => {
       }
     });
   });
+
+  describe('throws error if ship cannot be placed at designated position', () => {
+
+    test('throws error when designated place is occupied', () => {
+      expect(() => myGameboard.placeShip(1, 'vertical', [3, 0])).toThrow();
+      });
+      
+      test('throws error when designated place is out of map', () => {
+      expect(() => myGameboard.placeShip(1, 'horizontal', [10, 0])).toThrow();
+      expect(() => myGameboard.placeShip(1, 'horizontal', [2, 10])).toThrow();
+      expect(() => myGameboard.placeShip(4, 'horizontal', [0, 8])).toThrow();
+      expect(() => myGameboard.placeShip(3, 'vertical', [8, 3])).toThrow();
+      });
+
+  });
+
 });
 
 describe('Function receiveAttack', () => {
