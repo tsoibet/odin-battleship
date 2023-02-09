@@ -35,7 +35,7 @@ describe('Function getAttackCoor of Player should determine whether the chosen p
 describe('Function getAttackCoor of Computer should return a legal position', () => {
 
     let computer = new Computer();
-    computer.attacked.push(JSON.stringify([0, 1]));
+    computer.recordAttack([0, 1]);
 
     test('Chosen position is within the map', () => {
         for (let i = 0; i < 1000; i++) {
