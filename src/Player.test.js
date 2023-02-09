@@ -25,9 +25,9 @@ describe('Function getAttackCoor of Player should determine whether the chosen p
         expect(human.getAttackCoor([1, 0])).toEqual([1, 0]);
     });
 
-    test('throws error if chosen position is not legal', () => {
-        expect(() => human.getAttackCoor([1, 1])).toThrow();
-        expect(() => human.getAttackCoor([10, 10])).toThrow();
+    test('returns false if chosen position is not legal', () => {
+        expect(human.getAttackCoor([1, 1])).toBeFalsy();
+        expect(human.getAttackCoor([10, 10])).toBeFalsy();
     });
 
 });
@@ -35,7 +35,7 @@ describe('Function getAttackCoor of Player should determine whether the chosen p
 describe('Function getAttackCoor of Computer should return a legal position', () => {
 
     let computer = new Computer();
-    computer.attacked.push(JSON.stringify([0, 1]));
+    computer.recordAttack([0, 1]);
 
     test('Chosen position is within the map', () => {
         for (let i = 0; i < 1000; i++) {

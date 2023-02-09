@@ -20,26 +20,25 @@ export default class Gameboard {
   }
 
   placeShip(ship, [x, y]) {
-    const errMsg = 'There is not enough space to place the ship!';
     if (x < 0 || x > 9 || y < 0 || y > 9) {
-      throw new Error(errMsg);
+      return false;
     }
     if (ship.direction === 'horizontal') {
       if (y + ship.length - 1 > 9) {
-        throw new Error(errMsg);
+        return false;
       }
       for (let i = y + ship.length - 1; i >= y; i--) {
         if (this.map[x][i]['ship']) {
-          throw new Error(errMsg);
+          return false;
         }
       }
     } else {
       if (x + ship.length - 1 > 9) {
-        throw new Error(errMsg);
+        return false;
       }
       for (let i = x + ship.length - 1; i >= x; i--) {
         if (this.map[i][y]['ship']) {
-          throw new Error(errMsg);
+          return false;
         }
       }
     }
@@ -52,6 +51,7 @@ export default class Gameboard {
         this.map[i][y]['ship'] = ship;
       }
     }
+    return true;
   }
 
   receiveAttack([x, y]) {

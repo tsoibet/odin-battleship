@@ -11,20 +11,18 @@ export default class Player {
     }
 
     createDefaultShips() {
-        const ship01 = new Ship(4);
-        const ship02 = new Ship(3);
-        const ship03 = new Ship(2);
-        const ship04 = new Ship(1);
-        const ship05 = new Ship(1);
-        this.ships = [ship01, ship02, ship03, ship04, ship05];
+        for (let i = 1; i < 4; i++) {
+            const ship = new Ship(i);
+            this.ships.push(ship);
+        }
     }
 
     getAttackCoor([x, y]) {
         if (x < 0 || x > 9 || y < 0 || y > 9) {
-            throw new Error('Target is out of map!');
+            return false;
         }
         if (this.attacked.includes(JSON.stringify([x, y]))) {
-            throw new Error('Target has been already attacked!');
+            return false;
         }
         return [x, y];
     }
