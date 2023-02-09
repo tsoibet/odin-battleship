@@ -1,15 +1,12 @@
 import Ship from './Ship';
 
-test('Class Ship creates a ship object.', () => {
-  let myShip = new Ship();
-  expect(typeof myShip).toBe('object');
-});
-
-test('Ship has correct designated length.', () => {
-  let myShipOne = new Ship(1);
-  let myShipTwo = new Ship(4);
-  expect(myShipOne.length).toBe(1);
+test('Ship has correct designated length and direction.', () => {
+  let myShipOne = new Ship(2, 'horizontal');
+  let myShipTwo = new Ship(4, 'vertical');
+  expect(myShipOne.length).toBe(2);
+  expect(myShipOne.direction).toBe('horizontal');
   expect(myShipTwo.length).toBe(4);
+  expect(myShipTwo.direction).toBe('vertical');
 });
 
 test('Function gotHit increases one hit of the ship.', () => {
