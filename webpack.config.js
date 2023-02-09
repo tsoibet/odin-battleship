@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     mode: 'development',
     entry: {
-        index: './src/gameLoop.js',
+        index: './src/index.js',
     },
     devtool: 'inline-source-map',
     devServer: {
@@ -20,12 +20,4 @@ module.exports = {
         path: path.resolve(__dirname, 'doc'),
         clean: true,
     },
-    // module: {
-    //   rules: [
-    //     {
-    //       test: /\.css$/i,
-    //       use: ['style-loader', 'css-loader'],
-    //     },
-    //   ],
-    // },
 };
