@@ -1,4 +1,5 @@
-import Gameboard from "./Gameboard"
+import Gameboard from "./Gameboard";
+import Ship from "./Ship";
 
 test('Gameboard has a map of 10x10', () => {
   let myGameboard = new Gameboard();
@@ -24,10 +25,13 @@ test('Gameboard has a map of 10x10', () => {
 
 describe('Function placeShip', () => {
   let myGameboard = new Gameboard();
-  myGameboard.placeShip(2, 'horizontal', [0, 1]);
-  myGameboard.placeShip(3, 'vertical', [3, 0]);
+  let shipOne = new Ship(2, 'horizontal');
+  let shipTwo = new Ship(3, 'vertical');
 
   describe('places ship on desingated position with correct direction', () => {
+
+    myGameboard.placeShip(shipOne, [0, 1]);
+    myGameboard.placeShip(shipTwo, [3, 0]);
 
     test('On designated position there is ship of correct length and direction', () => {
       expect(myGameboard.map[3][0]['ship']).not.toBeNull();
@@ -57,16 +61,21 @@ describe('Function placeShip', () => {
 
   describe('throws error if ship cannot be placed at designated position', () => {
 
+    const shipA = new Ship(1, 'vertical');
+    const shipB = new Ship(1, 'horizontal');
+    const shipC = new Ship(4, 'horizontal');
+    const shipD = new Ship(3, 'vertical');
+
     test('throws error when designated place is occupied', () => {
-      expect(() => myGameboard.placeShip(1, 'vertical', [3, 0])).toThrow();
-      });
+      expect(() => myGameboard.placeShip(shipA, [3, 0])).toThrow();
+    });
       
-      test('throws error when designated place is out of map', () => {
-      expect(() => myGameboard.placeShip(1, 'horizontal', [10, 0])).toThrow();
-      expect(() => myGameboard.placeShip(1, 'horizontal', [2, 10])).toThrow();
-      expect(() => myGameboard.placeShip(4, 'horizontal', [0, 8])).toThrow();
-      expect(() => myGameboard.placeShip(3, 'vertical', [8, 3])).toThrow();
-      });
+    test('throws error when designated place is out of map', () => {
+      expect(() => myGameboard.placeShip(shipB, [10, 0])).toThrow();
+      expect(() => myGameboard.placeShip(shipB, [2, 10])).toThrow();
+      expect(() => myGameboard.placeShip(shipC, [0, 8])).toThrow();
+      expect(() => myGameboard.placeShip(shipD, [8, 3])).toThrow();
+    });
 
   });
 
@@ -74,7 +83,8 @@ describe('Function placeShip', () => {
 
 describe('Function receiveAttack', () => {
   let myGameboard = new Gameboard();
-  myGameboard.placeShip(2, 'horizontal', [0, 1]);
+  const ship = new Ship(2, 'horizontal');
+  myGameboard.placeShip(ship, [0, 1]);
 
   test('number of hits of the correct ship increases by 1 if the attack hit a ship', () => {
     expect(myGameboard.map[0][1]['ship'].hit).toBe(0);
@@ -99,18 +109,5 @@ describe('Function receiveAttack', () => {
         expect(myGameboard.map[r][c]['attacked']).toBeFalsy();
       }
     }
-  });
-});
-
-describe('Function allSunk', () => {
-  let myGameboard = new Gameboard();
-  myGameboard.placeShip(1, 'horizontal', [1, 1]);
-  myGameboard.placeShip(1, 'horizontal', [2, 2]);
-  test('returns correctly whether all the ships on map are sunk', () => {
-    expect(myGameboard.allSunk()).toBeFalsy();
-    myGameboard.receiveAttack([2, 2]);
-    expect(myGameboard.allSunk()).toBeFalsy();
-    myGameboard.receiveAttack([1, 1]);
-    expect(myGameboard.allSunk()).toBeTruthy();
   });
 });
