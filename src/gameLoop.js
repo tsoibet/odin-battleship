@@ -6,7 +6,13 @@ const computer = new Computer();
 for (let ship of player.ships) {
     let a = prompt(`Place a ${ship.length}-unit-long ship: enter x coordinate`);
     let b = prompt(`Place a ${ship.length}-unit-long ship: enter y coordinate`);
-    player.gameboard.placeShip(ship, [Number(a), Number(b)]);
+    let done = player.gameboard.placeShip(ship, [Number(a), Number(b)]);
+    while (!done) {
+        alert(`The ship cannot be placed on ${[a, b]}. Please choose again.`);
+        a = prompt(`Place a ${ship.length}-unit-long ship: enter x coordinate`);
+        b = prompt(`Place a ${ship.length}-unit-long ship: enter y coordinate`);
+        done = player.gameboard.placeShip(ship, [Number(a), Number(b)]);
+    }
 }
 
 // Computer ships are placed with predetermined coordinates at this stage
@@ -23,10 +29,16 @@ while (!isEnd()) {
     if (turn % 2) {
         let x = prompt("Please enter x coordinate");
         let y = prompt("Please enter y coordinate");
-        let pos = player.getAttackCoor([x, y]);
-        computer.gameboard.receiveAttack(pos);
-        player.recordAttack(pos);
-        alert(`You attacked ${pos}!`);
+        let isLegal = player.getAttackCoor([x, y]);
+        while (!isLegal) {
+            alert(`Cannot attack ${[x, y]}. Please choose again.`);
+            x = prompt("Please enter x coordinate");
+            y = prompt("Please enter y coordinate");
+            isLegal = player.getAttackCoor([x, y]);
+        }
+        computer.gameboard.receiveAttack([x, y]);
+        player.recordAttack([x, y]);
+        alert(`You attacked ${[x, y]}!`);
     } else {
         let pos = computer.getAttackCoor();
         player.gameboard.receiveAttack(pos);
@@ -40,7 +52,3 @@ if (player.lose()) {
 } else {
     alert(`${player.name} Won!`);
 }
-
-console.log(player.gameboard.map);
-console.log(computer.gameboard.map);
-console.log(computer.attacked);

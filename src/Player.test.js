@@ -25,9 +25,9 @@ describe('Function getAttackCoor of Player should determine whether the chosen p
         expect(human.getAttackCoor([1, 0])).toEqual([1, 0]);
     });
 
-    test('throws error if chosen position is not legal', () => {
-        expect(() => human.getAttackCoor([1, 1])).toThrow();
-        expect(() => human.getAttackCoor([10, 10])).toThrow();
+    test('returns false if chosen position is not legal', () => {
+        expect(human.getAttackCoor([1, 1])).toBeFalsy();
+        expect(human.getAttackCoor([10, 10])).toBeFalsy();
     });
 
 });

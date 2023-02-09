@@ -19,10 +19,10 @@ export default class Player {
 
     getAttackCoor([x, y]) {
         if (x < 0 || x > 9 || y < 0 || y > 9) {
-            throw new Error('Target is out of map!');
+            return false;
         }
         if (this.attacked.includes(JSON.stringify([x, y]))) {
-            throw new Error('Target has been already attacked!');
+            return false;
         }
         return [x, y];
     }

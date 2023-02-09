@@ -23,60 +23,56 @@ test('Gameboard has a map of 10x10', () => {
   expect(correctMapSize).toBeTruthy();
 });
 
-describe('Function placeShip', () => {
+describe('Function placeShip determines whether the ship can be placed on designated position and handles correspondingly', () => {
+
   let myGameboard = new Gameboard();
   let shipOne = new Ship(2, 'horizontal');
   let shipTwo = new Ship(3, 'vertical');
 
-  describe('places ship on desingated position with correct direction', () => {
-
-    myGameboard.placeShip(shipOne, [0, 1]);
-    myGameboard.placeShip(shipTwo, [3, 0]);
-
-    test('On designated position there is ship of correct length and direction', () => {
-      expect(myGameboard.map[3][0]['ship']).not.toBeNull();
-      expect(myGameboard.map[4][0]['ship']).not.toBeNull();
-      expect(myGameboard.map[5][0]['ship']).not.toBeNull();
-      expect(myGameboard.map[3][0]['ship'] === myGameboard.map[4][0]['ship']).toBeTruthy();
-      expect(myGameboard.map[3][0]['ship'] === myGameboard.map[5][0]['ship']).toBeTruthy();
-
-      expect(myGameboard.map[0][1]['ship']).not.toBeNull();
-      expect(myGameboard.map[0][2]['ship']).not.toBeNull();
-      expect(myGameboard.map[0][1]['ship'] === myGameboard.map[0][2]['ship']).toBeTruthy();
-      expect(myGameboard.map[0][1]['ship'] === myGameboard.map[3][0]['ship']).toBeFalsy();
-    });
-
-    test('All other positions are empty', () => {
-      const shipLocations = [[0, 1], [0, 2], [3, 0], [4, 0], [5, 0]];
-      for (let r = 0; r < 10; r++) {
-        for (let c = 0; c < 10; c++) {
-          if (JSON.stringify(shipLocations).includes(JSON.stringify([r, c]))) {
-            continue;
-          }
-          expect(myGameboard.map[r][c]['ship']).toBeNull();
-        }
-      }
-    });
+  test('returns true after successfully placing ship on desingated position', () => {
+    expect(myGameboard.placeShip(shipOne, [0, 1])).toBeTruthy();
+    expect(myGameboard.placeShip(shipTwo, [3, 0])).toBeTruthy();
   });
 
-  describe('throws error if ship cannot be placed at designated position', () => {
+  test('On designated position there is ship of correct length and direction', () => {
+    expect(myGameboard.map[3][0]['ship']).not.toBeNull();
+    expect(myGameboard.map[4][0]['ship']).not.toBeNull();
+    expect(myGameboard.map[5][0]['ship']).not.toBeNull();
+    expect(myGameboard.map[3][0]['ship'] === myGameboard.map[4][0]['ship']).toBeTruthy();
+    expect(myGameboard.map[3][0]['ship'] === myGameboard.map[5][0]['ship']).toBeTruthy();
 
-    const shipA = new Ship(1, 'vertical');
-    const shipB = new Ship(1, 'horizontal');
-    const shipC = new Ship(4, 'horizontal');
-    const shipD = new Ship(3, 'vertical');
+    expect(myGameboard.map[0][1]['ship']).not.toBeNull();
+    expect(myGameboard.map[0][2]['ship']).not.toBeNull();
+    expect(myGameboard.map[0][1]['ship'] === myGameboard.map[0][2]['ship']).toBeTruthy();
+    expect(myGameboard.map[0][1]['ship'] === myGameboard.map[3][0]['ship']).toBeFalsy();
+  });
 
-    test('throws error when designated place is occupied', () => {
-      expect(() => myGameboard.placeShip(shipA, [3, 0])).toThrow();
-    });
-      
-    test('throws error when designated place is out of map', () => {
-      expect(() => myGameboard.placeShip(shipB, [10, 0])).toThrow();
-      expect(() => myGameboard.placeShip(shipB, [2, 10])).toThrow();
-      expect(() => myGameboard.placeShip(shipC, [0, 8])).toThrow();
-      expect(() => myGameboard.placeShip(shipD, [8, 3])).toThrow();
-    });
+  test('All other positions are empty', () => {
+    const shipLocations = [[0, 1], [0, 2], [3, 0], [4, 0], [5, 0]];
+    for (let r = 0; r < 10; r++) {
+      for (let c = 0; c < 10; c++) {
+        if (JSON.stringify(shipLocations).includes(JSON.stringify([r, c]))) {
+          continue;
+        }
+        expect(myGameboard.map[r][c]['ship']).toBeNull();
+      }
+    }
+  });
 
+  const shipA = new Ship(1, 'vertical');
+  const shipB = new Ship(1, 'horizontal');
+  const shipC = new Ship(4, 'horizontal');
+  const shipD = new Ship(3, 'vertical');
+
+  test('returns false when designated place is occupied', () => {
+    expect(myGameboard.placeShip(shipA, [3, 0])).toBeFalsy();
+  });
+    
+  test('returns false when designated place is out of map', () => {
+    expect(myGameboard.placeShip(shipB, [10, 0])).toBeFalsy();
+    expect(myGameboard.placeShip(shipB, [2, 10])).toBeFalsy();
+    expect(myGameboard.placeShip(shipC, [0, 8])).toBeFalsy();
+    expect(myGameboard.placeShip(shipD, [8, 3])).toBeFalsy();
   });
 
 });
