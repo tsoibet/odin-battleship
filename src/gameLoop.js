@@ -15,10 +15,17 @@ for (let ship of player.ships) {
     }
 }
 
-// Computer ships are placed with predetermined coordinates at this stage
-computer.gameboard.placeShip(computer.ships[0], [5, 1]);
-computer.gameboard.placeShip(computer.ships[1], [3, 5]);
-computer.gameboard.placeShip(computer.ships[2], [5, 6]);
+for (let ship of computer.ships) {
+    let done = false;
+    while (!done) {
+        let pos = [getRandomInt(9), getRandomInt(9)];
+        done = computer.gameboard.placeShip(ship, pos);
+    }
+}
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
 
 function isEnd() {
     return (player.lose() || computer.lose())
