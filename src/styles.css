@@ -1,0 +1,98 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    font-size: calc(12px + 0.4vw + 0.2vh);
+}
+
+body {
+    min-height: 100vh;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.header {
+    padding: 0 0.5rem;
+    font-size: 2rem;
+}
+
+.main {
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+}
+
+.messageBox {
+    display: flex;
+    align-items: center;
+    width: 20rem;
+    height: 2rem;
+    border: 0.1rem solid black;
+    padding: 0 0.5rem;
+}
+
+.battleScreen {
+    position: relative;
+    display: flex;
+    direction: row;
+    gap: 2rem;
+}
+
+.endScreen {
+    position: absolute;
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.visible {
+    width: 100%;
+    height: 100%;
+}
+
+.gameboard {
+    display: grid;
+    grid-template-columns: repeat(10, 2rem);
+    grid-template-rows: repeat(10, 2rem);
+    grid-auto-flow: row;
+    border: 0.1rem solid black;
+}
+
+.unit {
+    border: 1px solid black;
+}
+
+.Computer.gameboard {
+    cursor: pointer;
+}
+
+.Computer .unit:hover {
+    border: 0.15rem solid red;
+}
+
+.Computer .attacked {
+    cursor: not-allowed;
+}
+
+.attacked::after {
+    color: red;
+    content: "X";
+}
+
+.ship {
+    background-color: black;
+}
+
+
+.footer {
+    padding: 0.4rem 0;
+    font-size: 0.8rem;
+}
