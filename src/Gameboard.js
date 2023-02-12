@@ -55,9 +55,11 @@ export default class Gameboard {
   }
 
   receiveAttack([x, y]) {
+    this.map[x][y]['attacked'] = true;
     if (this.map[x][y]['ship'] !== null) {
       this.map[x][y]['ship'].gotHit();
+      return true;
     }
-    this.map[x][y]['attacked'] = true;
+    return false;
   }
 }

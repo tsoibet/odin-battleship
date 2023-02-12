@@ -36,9 +36,12 @@ export default class Game {
             displayMessage(`Congratulations, you won!`);
         } else {
             let pos = this.computer.getAttackCoor();
-            this.player.gameboard.receiveAttack(pos);
+            if (this.player.gameboard.receiveAttack(pos)) {
+                displayMessage(`Your ship got hit!`);
+            } else {
+                displayMessage(`${this.computer.name}'s attack missed!`);
+            }
             this.computer.recordAttack(pos);
-            displayMessage(`${this.computer.name} attacked ${pos}!`);
             updateGameboard(this);
             if (this.player.lose()) {
                 displayMessage(`${this.computer.name} Won. You lost.`);
