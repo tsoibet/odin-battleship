@@ -31,7 +31,8 @@ export function renderHomepage(game) {
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
             const unit = document.createElement('div');
-            unit.id = `unit-${i}-${j}-player`;
+            unit.x = i;
+            unit.y = j;
             unit.classList.add('unit');
             playerGameboard.appendChild(unit);
         }
@@ -47,12 +48,11 @@ export function renderHomepage(game) {
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
             const unit = document.createElement('div');
-            unit.id = `unit-${i}-${j}-computer`;
+            unit.x = i;
+            unit.y = j;
             unit.classList.add('unit');
             unit.addEventListener('click', () => {
-                const x = Number(unit.id[5]);
-                const y = Number(unit.id[7]);
-                game.takeTurns([x, y]);
+                game.takeTurns([unit.x, unit.y]);
             });
             computerGameboard.appendChild(unit);
         }
