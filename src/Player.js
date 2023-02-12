@@ -47,9 +47,9 @@ export class Computer extends Player {
     }
     
     getAttackCoor() {
-        let pos = [getRandomInt(9), getRandomInt(9)];
+        let pos = [getRandomInt(10), getRandomInt(10)];
         while (this.attacked.includes(JSON.stringify(pos))) {
-            pos = [getRandomInt(9), getRandomInt(9)];
+            pos = [getRandomInt(10), getRandomInt(10)];
         }
         return pos;
     }

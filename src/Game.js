@@ -16,14 +16,14 @@ class Game {
         for (let ship of this.player.ships) {
             let done = false;
             while (!done) {
-                let pos = [getRandomInt(9), getRandomInt(9)];
+                let pos = [getRandomInt(10), getRandomInt(10)];
                 done = this.player.gameboard.placeShip(ship, pos);
             }
         }
         for (let ship of this.computer.ships) {
             let done = false;
             while (!done) {
-                let pos = [getRandomInt(9), getRandomInt(9)];
+                let pos = [getRandomInt(10), getRandomInt(10)];
                 done = this.computer.gameboard.placeShip(ship, pos);
             }
         }
