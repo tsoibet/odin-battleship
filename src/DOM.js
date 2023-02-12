@@ -1,4 +1,6 @@
-export function renderHomepage(game) {
+import start from "./Game";
+
+export default function renderHomepage(game) {
     const body = document.querySelector("body");
     body.textContent = "";
 
@@ -16,7 +18,7 @@ export function renderHomepage(game) {
     messageBox.classList.add('messageBox');
     const message = document.createElement("div");
     message.classList.add('message');
-    message.textContent = 'Your turn.';
+    message.textContent = 'Click start button.';
     messageBox.appendChild(message);
     main.appendChild(messageBox);
 
@@ -24,7 +26,25 @@ export function renderHomepage(game) {
     battleScreen.classList.add('battleScreen');
     const endScreen = document.createElement("div");
     endScreen.classList.add('endScreen');
+    endScreen.classList.add('invisible');
+    const restartButton = document.createElement("div");
+    restartButton.classList.add('restart');
+    restartButton.classList.add('button');
+    restartButton.classList.add('invisible');
+    restartButton.textContent = 'Play again';
+    restartButton.addEventListener('click', start);
+    endScreen.appendChild(restartButton);
     battleScreen.appendChild(endScreen);
+    const startScreen = document.createElement("div");
+    startScreen.classList.add('startScreen');
+    const startButton = document.createElement("div");
+    startButton.classList.add('start');
+    startButton.classList.add('button');
+    startButton.textContent = 'Start';
+    startButton.addEventListener('click', hideStartScreen);
+    startScreen.appendChild(startButton);
+    battleScreen.appendChild(startScreen);
+
     const playerGameboard = document.createElement("div");
     playerGameboard.classList.add('Player');
     playerGameboard.classList.add('gameboard');
@@ -115,4 +135,18 @@ function updateComputerGameboard(computer) {
 export function displayMessage(text) {
     const message = document.querySelector('.message');
     message.textContent = text;
+}
+
+export function showEndScreen() {
+    const endScreen = document.querySelector('.endScreen');
+    endScreen.classList.remove('invisible');
+    const restartButton = document.querySelector('.restart.button');
+    restartButton.classList.remove('invisible');
+}
+
+function hideStartScreen() {
+    const startScreen = document.querySelector('.startScreen');
+    startScreen.classList.add('invisible');
+    const startButton = document.querySelector('.start.button');
+    startButton.classList.add('invisible');
 }

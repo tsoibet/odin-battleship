@@ -1,7 +1,13 @@
 import Player, { Computer } from "./Player";
-import { displayMessage, updateGameboard } from "./DOM";
+import renderHomepage, { displayMessage, showEndScreen, updateGameboard } from "./DOM";
 
-export default class Game {
+export default function start() {
+    const game = new Game();
+    console.log(game);
+    renderHomepage(game);
+    updateGameboard(game);
+}
+class Game {
     constructor() {
         this.player = new Player();
         this.computer = new Computer();
@@ -48,8 +54,7 @@ export default class Game {
             }
         }
         if (isEnd(this.player, this.computer)) {
-            const endScreen = document.querySelector('.endScreen');
-            endScreen.classList.add('visible');
+            showEndScreen();
         }
     }
 }
