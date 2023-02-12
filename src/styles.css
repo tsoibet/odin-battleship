@@ -42,14 +42,18 @@ body {
 
 .battleScreen {
     position: relative;
-    display: flex;
-    direction: row;
-    gap: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr auto;
+    grid-auto-flow: column;
+    column-gap: 4rem;
+    row-gap: 0.5rem;
+    place-items: center;
 }
 
 .endScreen {
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     background-color: rgba(255, 255, 255, 0.5);
 }
 
@@ -67,6 +71,7 @@ body {
 }
 
 .unit {
+    position: relative;
     border: 1px solid black;
 }
 
@@ -75,22 +80,28 @@ body {
 }
 
 .Computer .unit:hover {
-    border: 0.15rem solid red;
+    border: 0.1rem solid red;
 }
 
 .Computer .attacked {
     cursor: not-allowed;
 }
 
-.attacked::after {
-    color: red;
-    content: "X";
+.attacked {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    border: 0.2rem solid red;
+    border-radius: 2rem;
 }
 
 .ship {
+    position: absolute;
+    height: 100%;
+    width: 100%;
     background-color: black;
 }
-
 
 .footer {
     padding: 0.4rem 0;

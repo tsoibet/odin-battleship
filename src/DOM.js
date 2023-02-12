@@ -37,6 +37,10 @@ export function renderHomepage(game) {
         }
     }
     battleScreen.appendChild(playerGameboard);
+    const playerName = document.createElement("div");
+    playerName.classList.add('name');
+    playerName.textContent = `${game.player.name}`;
+    battleScreen.appendChild(playerName);
     const computerGameboard = document.createElement("div");
     computerGameboard.classList.add('Computer');
     computerGameboard.classList.add('gameboard');
@@ -54,6 +58,10 @@ export function renderHomepage(game) {
         }
     }
     battleScreen.appendChild(computerGameboard);
+    const computerName = document.createElement("div");
+    computerName.classList.add('name');
+    computerName.textContent = `${game.computer.name}`;
+    battleScreen.appendChild(computerName);
     main.appendChild(battleScreen);
     container.appendChild(main);
 
@@ -74,11 +82,16 @@ function updatePlayerGameboard(player) {
     const units = document.querySelectorAll('.Player .unit');
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
+            units[i * 10 + j].textContent = "";
             if (player.gameboard.map[i][j]['ship']) {
-                units[i * 10 + j].classList.add('ship');
+                const ship = document.createElement('div');
+                ship.classList.add('ship');
+                units[i * 10 + j].appendChild(ship);
             }
             if (player.gameboard.map[i][j]['attacked']) {
-                units[i * 10 + j].classList.add('attacked');
+                const attacked = document.createElement('div');
+                attacked.classList.add('attacked');
+                units[i * 10 + j].appendChild(attacked);
             }
         }
     }
@@ -88,14 +101,15 @@ function updateComputerGameboard(computer) {
     const units = document.querySelectorAll('.Computer .unit');
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
-            if (computer.gameboard.map[i][j]['ship']) {
-                units[i * 10 + j].classList.add('ship');
-            }
+            units[i * 10 + j].textContent = "";
             if (computer.gameboard.map[i][j]['attacked']) {
-                units[i * 10 + j].classList.add('attacked');
-                units[i * 10 + j].classList.remove('enabled');
+                const attacked = document.createElement('div');
+                attacked.classList.add('attacked');
+                units[i * 10 + j].appendChild(attacked);
                 if (computer.gameboard.map[i][j]['ship']) {
-                    units[i * 10 + j].classList.add('ship');
+                    const ship = document.createElement('div');
+                    ship.classList.add('ship');
+                    units[i * 10 + j].appendChild(ship);
                 }
             }
         }
