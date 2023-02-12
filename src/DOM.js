@@ -1,6 +1,4 @@
-import {attack} from './gameLoop.js';
-
-export function renderHomepage(player, computer) {
+export function renderHomepage(game) {
     const body = document.querySelector("body");
     body.textContent = "";
 
@@ -18,6 +16,7 @@ export function renderHomepage(player, computer) {
     messageBox.classList.add('messageBox');
     const message = document.createElement("div");
     message.classList.add('message');
+    message.textContent = 'Your turn.';
     messageBox.appendChild(message);
     main.appendChild(messageBox);
 
@@ -49,7 +48,7 @@ export function renderHomepage(player, computer) {
             unit.addEventListener('click', () => {
                 const x = Number(unit.id[5]);
                 const y = Number(unit.id[7]);
-                attack(player, computer, [x, y]);
+                game.takeTurns([x, y]);
             });
             computerGameboard.appendChild(unit);
         }
@@ -66,9 +65,9 @@ export function renderHomepage(player, computer) {
     body.appendChild(container);
 }
 
-export function updateGameboard(player, computer) {
-    updatePlayerGameboard(player);
-    updateComputerGameboard(computer);
+export function updateGameboard(game) {
+    updatePlayerGameboard(game.player);
+    updateComputerGameboard(game.computer);
 }
 
 function updatePlayerGameboard(player) {
