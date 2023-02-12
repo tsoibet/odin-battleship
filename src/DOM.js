@@ -18,7 +18,7 @@ export default function renderHomepage(game) {
     messageBox.classList.add('messageBox');
     const message = document.createElement("div");
     message.classList.add('message');
-    message.textContent = 'Click start button.';
+    message.textContent = 'Randomize ship layout, click start.';
     messageBox.appendChild(message);
     main.appendChild(messageBox);
 
@@ -37,6 +37,12 @@ export default function renderHomepage(game) {
     battleScreen.appendChild(endScreen);
     const startScreen = document.createElement("div");
     startScreen.classList.add('startScreen');
+    const randomizeButton = document.createElement("div");
+    randomizeButton.classList.add('randomize');
+    randomizeButton.classList.add('button');
+    randomizeButton.textContent = 'Randomize';
+    randomizeButton.addEventListener('click', start);
+    startScreen.appendChild(randomizeButton);
     const startButton = document.createElement("div");
     startButton.classList.add('start');
     startButton.classList.add('button');
@@ -149,4 +155,6 @@ function hideStartScreen() {
     startScreen.classList.add('invisible');
     const startButton = document.querySelector('.start.button');
     startButton.classList.add('invisible');
+    const randomizeButton = document.querySelector('.randomize.button');
+    randomizeButton.classList.add('invisible');
 }
