@@ -80,40 +80,36 @@ export function updateGameboard(game) {
 
 function updatePlayerGameboard(player) {
     const units = document.querySelectorAll('.Player .unit');
-    for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
-            units[i * 10 + j].textContent = "";
-            if (player.gameboard.map[i][j]['ship']) {
-                const ship = document.createElement('div');
-                ship.classList.add('ship');
-                units[i * 10 + j].appendChild(ship);
-            }
-            if (player.gameboard.map[i][j]['attacked']) {
-                const attacked = document.createElement('div');
-                attacked.classList.add('attacked');
-                units[i * 10 + j].appendChild(attacked);
-            }
+    units.forEach(unit => {
+        unit.textContent = '';
+        if (player.gameboard.map[unit.x][unit.y]['ship']) {
+            const ship = document.createElement('div');
+            ship.classList.add('ship');
+            unit.appendChild(ship);
         }
-    }
+        if (player.gameboard.map[unit.x][unit.y]['attacked']) {
+            const attacked = document.createElement('div');
+            attacked.classList.add('attacked');
+            unit.appendChild(attacked);
+        }
+    });
 }
 
 function updateComputerGameboard(computer) {
     const units = document.querySelectorAll('.Computer .unit');
-    for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
-            units[i * 10 + j].textContent = "";
-            if (computer.gameboard.map[i][j]['attacked']) {
-                const attacked = document.createElement('div');
-                attacked.classList.add('attacked');
-                units[i * 10 + j].appendChild(attacked);
-                if (computer.gameboard.map[i][j]['ship']) {
-                    const ship = document.createElement('div');
-                    ship.classList.add('ship');
-                    units[i * 10 + j].appendChild(ship);
-                }
+    units.forEach(unit => {
+        unit.textContent = '';
+        if (computer.gameboard.map[unit.x][unit.y]['attacked']) {
+            const attacked = document.createElement('div');
+            attacked.classList.add('attacked');
+            unit.appendChild(attacked);
+            if (computer.gameboard.map[unit.x][unit.y]['ship']) {
+                const ship = document.createElement('div');
+                ship.classList.add('ship');
+                unit.appendChild(ship);
             }
         }
-    }
+    });
 }
 
 export function displayMessage(text) {
