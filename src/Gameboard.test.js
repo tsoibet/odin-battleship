@@ -79,10 +79,10 @@ describe('Function placeShip determines whether the ship can be placed on design
 
 describe('Function receiveAttack', () => {
   let myGameboard = new Gameboard();
-  const ship = new Ship(2, 'horizontal');
+  const ship = new Ship(3, 'horizontal');
   myGameboard.placeShip(ship, [0, 1]);
 
-  test('number of hits of the correct ship increases by 1 if the attack hit a ship', () => {
+  test('number of hits of the correct ship increases by 1 if the attack hits a ship', () => {
     expect(myGameboard.map[0][1]['ship'].hit).toBe(0);
     myGameboard.receiveAttack([0, 1]);
     expect(myGameboard.map[0][1]['ship'].hit).toBe(1);
@@ -105,5 +105,13 @@ describe('Function receiveAttack', () => {
         expect(myGameboard.map[r][c]['attacked']).toBeFalsy();
       }
     }
+  });
+
+  test('returns true if the attack hits a ship', () => {
+    expect(myGameboard.receiveAttack([0, 3])).toBeTruthy();
+  });
+
+  test('returns false if the attack misses', () => {
+    expect(myGameboard.receiveAttack([3, 3])).toBeFalsy();
   });
 });

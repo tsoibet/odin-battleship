@@ -1,3 +1,5 @@
-import start from "./gameLoop";
+import start from './Game';
+import './styles.css';
 
 start();
+
