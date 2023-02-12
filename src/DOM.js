@@ -157,4 +157,5 @@ function hideStartScreen() {
     startButton.classList.add('invisible');
     const randomizeButton = document.querySelector('.randomize.button');
     randomizeButton.classList.add('invisible');
+    displayMessage('Your turn.');
 }
