@@ -54,15 +54,6 @@ export default function renderHomepage(game) {
     const playerGameboard = document.createElement("div");
     playerGameboard.classList.add('Player');
     playerGameboard.classList.add('gameboard');
-    for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
-            const unit = document.createElement('div');
-            unit.x = i;
-            unit.y = j;
-            unit.classList.add('unit');
-            playerGameboard.appendChild(unit);
-        }
-    }
     battleScreen.appendChild(playerGameboard);
     const playerName = document.createElement("div");
     playerName.classList.add('name');
@@ -71,18 +62,6 @@ export default function renderHomepage(game) {
     const computerGameboard = document.createElement("div");
     computerGameboard.classList.add('Computer');
     computerGameboard.classList.add('gameboard');
-    for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
-            const unit = document.createElement('div');
-            unit.x = i;
-            unit.y = j;
-            unit.classList.add('unit');
-            unit.addEventListener('click', () => {
-                game.takeTurns([unit.x, unit.y]);
-            });
-            computerGameboard.appendChild(unit);
-        }
-    }
     battleScreen.appendChild(computerGameboard);
     const computerName = document.createElement("div");
     computerName.classList.add('name');
@@ -101,41 +80,172 @@ export default function renderHomepage(game) {
 
 export function updateGameboard(game) {
     updatePlayerGameboard(game.player);
-    updateComputerGameboard(game.computer);
+    updateComputerGameboard(game, game.computer);
 }
 
 function updatePlayerGameboard(player) {
-    const units = document.querySelectorAll('.Player .unit');
-    units.forEach(unit => {
-        unit.textContent = '';
-        if (player.gameboard.map[unit.x][unit.y]['ship']) {
-            const ship = document.createElement('div');
-            ship.classList.add('ship');
-            unit.appendChild(ship);
+    const playerGameboard = document.querySelector('.Player.gameboard');
+    playerGameboard.textContent = '';
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            const unit = document.createElement('div');
+            unit.setAttribute('data-x', i);
+            unit.setAttribute('data-y', j);
+            unit.classList.add('unit');
+            playerGameboard.appendChild(unit);
         }
-        if (player.gameboard.map[unit.x][unit.y]['attacked']) {
-            const attacked = document.createElement('div');
-            attacked.classList.add('attacked');
-            unit.appendChild(attacked);
-        }
-    });
-}
-
-function updateComputerGameboard(computer) {
-    const units = document.querySelectorAll('.Computer .unit');
-    units.forEach(unit => {
-        unit.textContent = '';
-        if (computer.gameboard.map[unit.x][unit.y]['attacked']) {
-            const attacked = document.createElement('div');
-            attacked.classList.add('attacked');
-            unit.appendChild(attacked);
-            if (computer.gameboard.map[unit.x][unit.y]['ship']) {
-                const ship = document.createElement('div');
-                ship.classList.add('ship');
-                unit.appendChild(ship);
+    }
+    let renderedShips = [];
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            const unit = document.querySelector(`.Player .unit[data-x='${i}'][data-y='${j}']`);
+            if (player.gameboard.map[unit.dataset.x][unit.dataset.y]['ship']) {
+                const shipObj = player.gameboard.map[unit.dataset.x][unit.dataset.y]['ship'];
+                if (!renderedShips.includes(shipObj)) {
+                    const shipHead = document.createElement('div');
+                    shipHead.classList.add('ship');
+                    shipHead.classList.add('head');
+                    shipHead.classList.add(shipObj.direction);
+                    if (shipObj.isSunk()) {
+                        shipHead.classList.add('sunk');
+                    }
+                    unit.appendChild(shipHead);
+                    if (shipObj.length === 1) {
+                        shipHead.classList.add('tail');
+                    } else if (shipObj.direction === 'horizontal') {
+                        for (let l = 1; l < shipObj.length - 1; l++) {
+                            const adjUnit = document.querySelector(`.Player .unit[data-x='${i}'][data-y='${j + l}']`);
+                            const shipBody = document.createElement('div');
+                            shipBody.classList.add('ship');
+                            shipBody.classList.add('body');
+                            shipBody.classList.add(shipObj.direction);
+                            if (shipObj.isSunk()) {
+                                shipBody.classList.add('sunk');
+                            }
+                            adjUnit.appendChild(shipBody);
+                       }
+                       const lastUnit = document.querySelector(`.Player .unit[data-x='${i}'][data-y='${j + shipObj.length - 1}']`);
+                       const shipTail = document.createElement('div');
+                       shipTail.classList.add('ship');
+                       shipTail.classList.add('tail');
+                       shipTail.classList.add(shipObj.direction);
+                       if (shipObj.isSunk()) {
+                        shipTail.classList.add('sunk');
+                        }
+                       lastUnit.appendChild(shipTail);
+                    } else if (shipObj.direction === 'vertical') {
+                        for (let l = 1; l < shipObj.length - 1; l++) {
+                            const adjUnit = document.querySelector(`.Player .unit[data-x='${i + l}'][data-y='${j}']`);
+                            const shipBody = document.createElement('div');
+                            shipBody.classList.add('ship');
+                            shipBody.classList.add('body');
+                            shipBody.classList.add(shipObj.direction);
+                            if (shipObj.isSunk()) {
+                                shipBody.classList.add('sunk');
+                            }
+                            adjUnit.appendChild(shipBody);
+                       }
+                       const lastUnit = document.querySelector(`.Player .unit[data-x='${i + shipObj.length - 1}'][data-y='${j}']`);
+                       const shipTail = document.createElement('div');
+                       shipTail.classList.add('ship');
+                       shipTail.classList.add('tail');
+                       shipTail.classList.add(shipObj.direction);
+                       if (shipObj.isSunk()) {
+                        shipTail.classList.add('sunk');
+                        }
+                       lastUnit.appendChild(shipTail);
+                    }
+                    renderedShips.push(shipObj);
+                }
+            }
+            if (player.gameboard.map[unit.dataset.x][unit.dataset.y]['attacked']) {
+                const attacked = document.createElement('div');
+                attacked.classList.add('attacked');
+                unit.appendChild(attacked);
             }
         }
-    });
+    }
+}
+
+function updateComputerGameboard(game, computer) {
+    const computerGameboard = document.querySelector('.Computer.gameboard');
+    computerGameboard.textContent = '';
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            const unit = document.createElement('div');
+            unit.setAttribute('data-x', i);
+            unit.setAttribute('data-y', j);
+            unit.classList.add('unit');
+            unit.addEventListener('click', () => {
+                game.takeTurns([i, j]);
+            });
+            computerGameboard.appendChild(unit);
+        }
+    }
+    let renderedShips = [];
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            const unit = document.querySelector(`.Computer .unit[data-x='${i}'][data-y='${j}']`);
+            if (computer.gameboard.map[i][j]['attacked']) {
+                if (computer.gameboard.map[i][j]['ship']) {
+                    const shipObj = computer.gameboard.map[i][j]['ship'];
+                    if (!shipObj.isSunk()) {
+                        const ship = document.createElement('div');
+                        ship.classList.add('ship');
+                        unit.appendChild(ship);
+                    } else if (!renderedShips.includes(shipObj)){
+                        const shipHead = document.createElement('div');
+                        shipHead.classList.add('ship');
+                        shipHead.classList.add('head');
+                        shipHead.classList.add(shipObj.direction);
+                        shipHead.classList.add('sunk');
+                        unit.appendChild(shipHead);
+                        if (shipObj.length === 1) {
+                            shipHead.classList.add('tail');
+                        } else if (shipObj.direction === 'horizontal') {
+                            for (let l = 1; l < shipObj.length - 1; l++) {
+                                const adjUnit = document.querySelector(`.Computer .unit[data-x='${i}'][data-y='${j + l}']`);
+                                const shipBody = document.createElement('div');
+                                shipBody.classList.add('ship');
+                                shipBody.classList.add('body');
+                                shipBody.classList.add(shipObj.direction);
+                                shipBody.classList.add('sunk');
+                                adjUnit.appendChild(shipBody);
+                            }
+                            const lastUnit = document.querySelector(`.Computer .unit[data-x='${i}'][data-y='${j + shipObj.length - 1}']`);
+                            const shipTail = document.createElement('div');
+                            shipTail.classList.add('ship');
+                            shipTail.classList.add('tail');
+                            shipTail.classList.add(shipObj.direction);
+                            shipTail.classList.add('sunk');
+                            lastUnit.appendChild(shipTail);
+                        } else if (shipObj.direction === 'vertical') {
+                            for (let l = 1; l < shipObj.length - 1; l++) {
+                                const adjUnit = document.querySelector(`.Computer .unit[data-x='${i + l}'][data-y='${j}']`);
+                                const shipBody = document.createElement('div');
+                                shipBody.classList.add('ship');
+                                shipBody.classList.add('body');
+                                shipBody.classList.add(shipObj.direction);
+                                shipBody.classList.add('sunk');
+                                adjUnit.appendChild(shipBody);
+                            }
+                            const lastUnit = document.querySelector(`.Computer .unit[data-x='${i + shipObj.length - 1}'][data-y='${j}']`);
+                            const shipTail = document.createElement('div');
+                            shipTail.classList.add('ship');
+                            shipTail.classList.add('tail');
+                            shipTail.classList.add(shipObj.direction);
+                            shipTail.classList.add('sunk');
+                            lastUnit.appendChild(shipTail);
+                        }
+                        renderedShips.push(shipObj);
+                    }
+                }
+                const attacked = document.createElement('div');
+                attacked.classList.add('attacked');
+                unit.appendChild(attacked);
+            }
+        }
+    }
 }
 
 export function displayMessage(text) {
