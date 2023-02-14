@@ -114,19 +114,61 @@ body {
 
 .unit {
     position: relative;
-    border: 1px solid black;
+    border: 0.05rem solid grey;
 }
 
-.Computer.gameboard {
+.Computer .unit {
+    cursor: not-allowed;
+}
+
+.Computer .unit:empty {
     cursor: pointer;
 }
 
-.Computer .unit:hover {
-    border: 0.1rem solid red;
+.Computer .unit:empty:hover {
+    border: 0.12rem solid red;
 }
 
-.Computer .attacked {
-    cursor: not-allowed;
+.ship {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: darkseagreen;
+    border: 0 solid darkolivegreen;
+}
+
+.head.horizontal {
+    border-top-width: 0.12rem;
+    border-left-width: 0.12rem;
+    border-bottom-width: 0.12rem;
+}
+
+.head.vertical {
+    border-left-width: 0.12rem;
+    border-top-width: 0.12rem;
+    border-right-width: 0.12rem;
+}
+
+.body.horizontal {
+    border-top-width: 0.12rem;
+    border-bottom-width: 0.12rem;
+}
+
+.body.vertical {
+    border-left-width: 0.12rem;
+    border-right-width: 0.12rem;
+}
+
+.tail.horizontal {
+    border-top-width: 0.12rem;
+    border-right-width: 0.12rem;
+    border-bottom-width: 0.12rem;
+}
+
+.tail.vertical {
+    border-left-width: 0.12rem;
+    border-bottom-width: 0.12rem;
+    border-right-width: 0.12rem;
 }
 
 .attacked {
@@ -134,15 +176,18 @@ body {
     height: 100%;
     width: 100%;
     z-index: 1;
-    border: 0.2rem solid red;
-    border-radius: 2rem;
+    background-image: url(./icon/sea.svg);
+    background-position: center;
+    background-size: contain;
 }
 
-.ship {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background-color: black;
+.ship ~ .attacked {
+    background-image: url(./icon/fire.svg);
+}
+
+.ship.sunk {
+    border-color: red;
+    background-color: rosybrown;
 }
 
 .footer {
