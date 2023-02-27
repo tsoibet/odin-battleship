@@ -12,14 +12,10 @@ export default class Gameboard {
       }
       map.push(row);
     }
-    this._map = map;
+    this.map = map;
   }
 
-  get map() {
-    return this._map;
-  }
-
-  placeShip(ship, [x, y]) {
+  canPlaceShip(ship, [x, y]) {
     if (x < 0 || x > 9 || y < 0 || y > 9) {
       return false;
     }
@@ -28,7 +24,7 @@ export default class Gameboard {
         return false;
       }
       for (let i = y + ship.length - 1; i >= y; i--) {
-        if (this.map[x][i]['ship']) {
+        if (this.map[x][i]['ship'] && this.map[x][i]['ship'] !== ship) {
           return false;
         }
       }
@@ -37,8 +33,19 @@ export default class Gameboard {
         return false;
       }
       for (let i = x + ship.length - 1; i >= x; i--) {
-        if (this.map[i][y]['ship']) {
+        if (this.map[i][y]['ship'] && this.map[i][y]['ship'] !== ship) {
           return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  placeShip(ship, [x, y]) {
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 10; j++) {
+        if (this.map[i][j]['ship'] === ship) {
+          this.map[i][j]['ship'] = null;
         }
       }
     }
@@ -51,7 +58,6 @@ export default class Gameboard {
         this.map[i][y]['ship'] = ship;
       }
     }
-    return true;
   }
 
   receiveAttack([x, y]) {

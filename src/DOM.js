@@ -18,7 +18,7 @@ export default function renderHomepage(game) {
     messageBox.classList.add('messageBox');
     const message = document.createElement("div");
     message.classList.add('message');
-    message.textContent = 'Randomize ship layout, click start.';
+    message.textContent = 'Drag on yellow marks to place ships.';
     messageBox.appendChild(message);
     main.appendChild(messageBox);
 
@@ -102,65 +102,26 @@ function updatePlayerGameboard(player) {
             if (player.gameboard.map[unit.dataset.x][unit.dataset.y]['ship']) {
                 const shipObj = player.gameboard.map[unit.dataset.x][unit.dataset.y]['ship'];
                 if (!renderedShips.includes(shipObj)) {
-                    const shipHead = document.createElement('div');
-                    shipHead.classList.add('ship');
-                    shipHead.classList.add('head');
-                    shipHead.classList.add(shipObj.direction);
+                    const shipDiv = document.createElement('div');
+                    shipDiv.setAttribute('data-x', i);
+                    shipDiv.setAttribute('data-y', j);
+                    shipDiv.classList.add('ship');
+                    shipDiv.classList.add(`length-${shipObj.length}`);
+                    shipDiv.classList.add(shipObj.direction);
                     if (shipObj.isSunk()) {
-                        shipHead.classList.add('sunk');
+                        shipDiv.classList.add('sunk');
                     }
-                    unit.appendChild(shipHead);
-                    if (shipObj.length === 1) {
-                        shipHead.classList.add('tail');
-                    } else if (shipObj.direction === 'horizontal') {
-                        for (let l = 1; l < shipObj.length - 1; l++) {
-                            const adjUnit = document.querySelector(`.Player .unit[data-x='${i}'][data-y='${j + l}']`);
-                            const shipBody = document.createElement('div');
-                            shipBody.classList.add('ship');
-                            shipBody.classList.add('body');
-                            shipBody.classList.add(shipObj.direction);
-                            if (shipObj.isSunk()) {
-                                shipBody.classList.add('sunk');
-                            }
-                            adjUnit.appendChild(shipBody);
-                       }
-                       const lastUnit = document.querySelector(`.Player .unit[data-x='${i}'][data-y='${j + shipObj.length - 1}']`);
-                       const shipTail = document.createElement('div');
-                       shipTail.classList.add('ship');
-                       shipTail.classList.add('tail');
-                       shipTail.classList.add(shipObj.direction);
-                       if (shipObj.isSunk()) {
-                        shipTail.classList.add('sunk');
-                        }
-                       lastUnit.appendChild(shipTail);
-                    } else if (shipObj.direction === 'vertical') {
-                        for (let l = 1; l < shipObj.length - 1; l++) {
-                            const adjUnit = document.querySelector(`.Player .unit[data-x='${i + l}'][data-y='${j}']`);
-                            const shipBody = document.createElement('div');
-                            shipBody.classList.add('ship');
-                            shipBody.classList.add('body');
-                            shipBody.classList.add(shipObj.direction);
-                            if (shipObj.isSunk()) {
-                                shipBody.classList.add('sunk');
-                            }
-                            adjUnit.appendChild(shipBody);
-                       }
-                       const lastUnit = document.querySelector(`.Player .unit[data-x='${i + shipObj.length - 1}'][data-y='${j}']`);
-                       const shipTail = document.createElement('div');
-                       shipTail.classList.add('ship');
-                       shipTail.classList.add('tail');
-                       shipTail.classList.add(shipObj.direction);
-                       if (shipObj.isSunk()) {
-                        shipTail.classList.add('sunk');
-                        }
-                       lastUnit.appendChild(shipTail);
-                    }
+                    unit.appendChild(shipDiv);
                     renderedShips.push(shipObj);
                 }
             }
             if (player.gameboard.map[unit.dataset.x][unit.dataset.y]['attacked']) {
                 const attacked = document.createElement('div');
-                attacked.classList.add('attacked');
+                if (player.gameboard.map[unit.dataset.x][unit.dataset.y]['ship']) {
+                    attacked.classList.add('fire');
+                } else {
+                    attacked.classList.add('sea');
+                }
                 unit.appendChild(attacked);
             }
         }
@@ -187,6 +148,7 @@ function updateComputerGameboard(game, computer) {
         for (let j = 0; j < 10; j++) {
             const unit = document.querySelector(`.Computer .unit[data-x='${i}'][data-y='${j}']`);
             if (computer.gameboard.map[i][j]['attacked']) {
+                const attacked = document.createElement('div');
                 if (computer.gameboard.map[i][j]['ship']) {
                     const shipObj = computer.gameboard.map[i][j]['ship'];
                     if (!shipObj.isSunk()) {
@@ -239,13 +201,80 @@ function updateComputerGameboard(game, computer) {
                         }
                         renderedShips.push(shipObj);
                     }
+                    attacked.classList.add('fire');
+                } else {
+                    attacked.classList.add('sea');
                 }
-                const attacked = document.createElement('div');
-                attacked.classList.add('attacked');
                 unit.appendChild(attacked);
             }
         }
     }
+}
+
+export function enableDragDrop(game) {
+    let draggedShip;
+
+    document.querySelectorAll('.Player .ship').forEach(item => {
+        item.draggable = true;
+
+        item.addEventListener('dragstart', (event) => {
+            draggedShip = game.player.gameboard.map[Number(event.target.dataset.x)][Number(event.target.dataset.y)]['ship'];
+            setTimeout(() => {
+                event.target.classList.add('dragging');
+            }, 0);
+        });
+
+        item.addEventListener('dragend', (event) => {
+            if (event.target.classList.contains('dragging')) {
+                event.target.classList.remove('dragging');
+                displayMessage('Drop ship within your board.');
+            }
+        });
+    });
+
+    document.querySelectorAll('.Player .unit').forEach(item => {
+        item.addEventListener('dragover', (event) => {
+            event.preventDefault();
+        });
+
+        item.addEventListener('dragenter', (event) => {
+            const x = Number(event.target.dataset.x);
+            const y = Number(event.target.dataset.y);
+            if (game.player.gameboard.canPlaceShip(draggedShip, [x, y])) {
+                event.currentTarget.classList.add('canDrop');
+            } else {
+                event.currentTarget.classList.add('cannotDrop');
+                
+            }
+        });
+
+        item.addEventListener('dragleave', (event) => {
+            if (event.target.classList.contains('canDrop')) {
+                event.target.classList.remove('canDrop');
+            }
+            if (event.target.classList.contains('cannotDrop')) {
+                event.target.classList.remove('cannotDrop');
+            }
+        });
+
+        item.addEventListener('drop', (event) => {
+            event.preventDefault();
+            document.querySelector('.dragging').classList.remove('dragging');
+            if (event.target.classList.contains('cannotDrop')) {
+                event.target.classList.remove('cannotDrop');
+            }
+            const x = Number(event.currentTarget.dataset.x);
+            const y = Number(event.currentTarget.dataset.y);
+            if (game.player.gameboard.canPlaceShip(draggedShip, [x, y])) {
+                game.player.gameboard.placeShip(draggedShip, [x, y]);
+                updateGameboard(game);
+                enableDragDrop(game);
+                displayMessage('Successfully placed ship.');
+            } else {
+                displayMessage('Cannot place ship there.');
+            }
+        });
+    });
 }
 
 export function displayMessage(text) {
@@ -267,5 +296,8 @@ function hideStartScreen() {
     startButton.classList.add('invisible');
     const randomizeButton = document.querySelector('.randomize.button');
     randomizeButton.classList.add('invisible');
+    for (const item of document.querySelectorAll(`[draggable='true']`)) {
+        item.draggable = false;
+    }
     displayMessage('Your turn.');
 }
