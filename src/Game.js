@@ -1,30 +1,36 @@
 import Player, { Computer } from "./Player";
-import renderHomepage, { displayMessage, showEndScreen, updateGameboard } from "./DOM";
+import renderHomepage, { displayMessage, enableDragDrop, showEndScreen, updateGameboard } from "./DOM";
 
 export default function start() {
     const game = new Game();
     console.log(game);
     renderHomepage(game);
     updateGameboard(game);
+    enableDragDrop(game);
 }
 class Game {
     constructor() {
         this.player = new Player();
         this.computer = new Computer();
 
-        // Player's ships are randomly placed on the gameboard at this stage
         for (let ship of this.player.ships) {
             let done = false;
             while (!done) {
                 let pos = [getRandomInt(10), getRandomInt(10)];
-                done = this.player.gameboard.placeShip(ship, pos);
+                if(this.player.gameboard.canPlaceShip(ship, pos)) {
+                    this.player.gameboard.placeShip(ship, pos);
+                    done = true;
+                }
             }
         }
         for (let ship of this.computer.ships) {
             let done = false;
             while (!done) {
                 let pos = [getRandomInt(10), getRandomInt(10)];
-                done = this.computer.gameboard.placeShip(ship, pos);
+                if (this.computer.gameboard.canPlaceShip(ship, pos)) {
+                    this.computer.gameboard.placeShip(ship, pos);
+                    done = true;
+                }
             }
         }
     }

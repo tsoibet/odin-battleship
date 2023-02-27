@@ -23,16 +23,44 @@ test('Gameboard has a map of 10x10', () => {
   expect(correctMapSize).toBeTruthy();
 });
 
-describe('Function placeShip determines whether the ship can be placed on designated position and handles correspondingly', () => {
+describe('Function canPlaceShip determines whether the ship can be placed on designated position', () => {
 
   let myGameboard = new Gameboard();
   let shipOne = new Ship(2, 'horizontal');
   let shipTwo = new Ship(3, 'vertical');
 
-  test('returns true after successfully placing ship on desingated position', () => {
-    expect(myGameboard.placeShip(shipOne, [0, 1])).toBeTruthy();
-    expect(myGameboard.placeShip(shipTwo, [3, 0])).toBeTruthy();
+  test('returns true if ship can be placed on desingated position', () => {
+    expect(myGameboard.canPlaceShip(shipOne, [0, 1])).toBeTruthy();
+    expect(myGameboard.canPlaceShip(shipTwo, [3, 0])).toBeTruthy();
   });
+
+  const shipA = new Ship(1, 'vertical');
+  const shipB = new Ship(1, 'horizontal');
+  const shipC = new Ship(4, 'horizontal');
+  const shipD = new Ship(3, 'vertical');
+
+  test('returns false when designated place is occupied', () => {
+    myGameboard.placeShip(shipOne, [0, 1]);
+    myGameboard.placeShip(shipTwo, [3, 0]);
+    expect(myGameboard.canPlaceShip(shipA, [3, 0])).toBeFalsy();
+  });
+    
+  test('returns false when designated place is out of map', () => {
+    expect(myGameboard.canPlaceShip(shipB, [10, 0])).toBeFalsy();
+    expect(myGameboard.canPlaceShip(shipB, [2, 10])).toBeFalsy();
+    expect(myGameboard.canPlaceShip(shipC, [0, 8])).toBeFalsy();
+    expect(myGameboard.canPlaceShip(shipD, [8, 3])).toBeFalsy();
+  });
+
+});
+
+describe('Function placeShip places ship on designated position', () => {
+
+  let myGameboard = new Gameboard();
+  let shipOne = new Ship(2, 'horizontal');
+  let shipTwo = new Ship(3, 'vertical');
+  myGameboard.placeShip(shipOne, [0, 1]);
+  myGameboard.placeShip(shipTwo, [3, 0]);
 
   test('On designated position there is ship of correct length and direction', () => {
     expect(myGameboard.map[3][0]['ship']).not.toBeNull();
@@ -57,22 +85,6 @@ describe('Function placeShip determines whether the ship can be placed on design
         expect(myGameboard.map[r][c]['ship']).toBeNull();
       }
     }
-  });
-
-  const shipA = new Ship(1, 'vertical');
-  const shipB = new Ship(1, 'horizontal');
-  const shipC = new Ship(4, 'horizontal');
-  const shipD = new Ship(3, 'vertical');
-
-  test('returns false when designated place is occupied', () => {
-    expect(myGameboard.placeShip(shipA, [3, 0])).toBeFalsy();
-  });
-    
-  test('returns false when designated place is out of map', () => {
-    expect(myGameboard.placeShip(shipB, [10, 0])).toBeFalsy();
-    expect(myGameboard.placeShip(shipB, [2, 10])).toBeFalsy();
-    expect(myGameboard.placeShip(shipC, [0, 8])).toBeFalsy();
-    expect(myGameboard.placeShip(shipD, [8, 3])).toBeFalsy();
   });
 
 });

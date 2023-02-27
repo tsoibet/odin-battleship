@@ -11,8 +11,12 @@ export default class Player {
     }
 
     createDefaultShips() {
+        for (let i = 2; i < 5; i++) {
+            const ship = new Ship(i, 'horizontal');
+            this.ships.push(ship);
+        }
         for (let i = 1; i < 4; i++) {
-            const ship = new Ship(i);
+            const ship = new Ship(i, 'vertical');
             this.ships.push(ship);
         }
     }

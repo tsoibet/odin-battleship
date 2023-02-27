@@ -8,6 +8,7 @@
 
 body {
     min-height: 100vh;
+    user-select: none;
 }
 
 .container {
@@ -117,6 +118,15 @@ body {
     border: 0.05rem solid grey;
 }
 
+.canDrop {
+    background-color: palegreen;
+}
+
+.cannotDrop {
+    background-image: url(./icon/block.svg);
+    background-size: contain;
+}
+
 .Computer .unit {
     cursor: not-allowed;
 }
@@ -126,7 +136,10 @@ body {
 }
 
 .Computer .unit:empty:hover {
-    border: 0.12rem solid red;
+    background-image: url(./icon/shooting.svg);
+    background-size: 1.8rem;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .ship {
@@ -137,54 +150,98 @@ body {
     border: 0 solid darkolivegreen;
 }
 
-.head.horizontal {
+.ship[draggable="true"] {
+    cursor: grab;
+    background-image: url(./icon/drag.svg);
+    background-size: 1.2rem;
+    background-repeat: no-repeat;
+}
+
+.dragging {
+    display: none;
+}
+
+.Player .ship {
+    border-width: 0.12rem;
+}
+
+.Player .ship.length-2.horizontal {
+    width: calc(4rem - 0.06rem);
+}
+
+.Player .ship.length-3.horizontal {
+    width: calc(6rem - 0.06rem);
+}
+
+.Player .ship.length-4.horizontal {
+    width: calc(8rem - 0.06rem);
+}
+
+.Player .ship.length-2.vertical {
+    height: calc(4rem - 0.06rem);
+}
+
+.Player .ship.length-3.vertical {
+    height: calc(6rem - 0.06rem);
+}
+
+.Player .ship.length-4.vertical {
+    height: calc(8rem - 0.06rem);
+}
+
+.Computer .head.horizontal {
     border-top-width: 0.12rem;
     border-left-width: 0.12rem;
     border-bottom-width: 0.12rem;
 }
 
-.head.vertical {
+.Computer .head.vertical {
     border-left-width: 0.12rem;
     border-top-width: 0.12rem;
     border-right-width: 0.12rem;
 }
 
-.body.horizontal {
+.Computer .body.horizontal {
     border-top-width: 0.12rem;
     border-bottom-width: 0.12rem;
 }
 
-.body.vertical {
+.Computer .body.vertical {
     border-left-width: 0.12rem;
     border-right-width: 0.12rem;
 }
 
-.tail.horizontal {
+.Computer .tail.horizontal {
     border-top-width: 0.12rem;
     border-right-width: 0.12rem;
     border-bottom-width: 0.12rem;
 }
 
-.tail.vertical {
+.Computer .tail.vertical {
     border-left-width: 0.12rem;
     border-bottom-width: 0.12rem;
     border-right-width: 0.12rem;
 }
 
-.attacked {
+.fire, .sea {
     position: absolute;
     height: 100%;
     width: 100%;
     z-index: 1;
-    background-image: url(./icon/sea.svg);
     background-position: center;
     background-size: contain;
 }
 
-.ship ~ .attacked {
+.fire {
     background-image: url(./icon/fire.svg);
+    background-size: 1.5rem;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
+.sea {
+    background-image: url(./icon/sea.svg);
+}
 .ship.sunk {
     border-color: red;
     background-color: rosybrown;
