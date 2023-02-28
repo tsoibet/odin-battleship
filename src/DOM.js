@@ -211,6 +211,13 @@ function updateComputerGameboard(game, computer) {
     }
 }
 
+export function coverComputerGameboard() {
+    const gameboard = document.querySelector('.Computer.gameboard');
+    const cover = document.createElement('div');
+    cover.classList.add('cover');
+    gameboard.prepend(cover);
+}
+
 export function enableDragDrop(game) {
     let draggedShip;
 
