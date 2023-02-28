@@ -1,5 +1,5 @@
 import Player, { Computer } from "./Player";
-import renderHomepage, { displayMessage, enableDragDrop, showEndScreen, updateGameboard } from "./DOM";
+import renderHomepage, { displayMessage, enableDragDrop, showEndScreen, updateGameboard, coverComputerGameboard } from "./DOM";
 
 export default function start() {
     const game = new Game();
@@ -35,7 +35,7 @@ class Game {
         }
     }
 
-    takeTurns = ([x, y]) => {
+    takeTurns = async ([x, y]) => {
         let isLegal = this.player.getAttackCoor([x, y]);
         if (!isLegal) {
             displayMessage(`Not here again! Pick another place.`);
@@ -47,6 +47,9 @@ class Game {
         if (this.computer.lose()) {
             displayMessage(`Congratulations, you won!`);
         } else {
+            displayMessage(`Computer is making an attack...`);
+            coverComputerGameboard();
+            await wait(500);
             let pos = this.computer.getAttackCoor();
             if (this.player.gameboard.receiveAttack(pos)) {
                 displayMessage(`Your ship got hit!`);
@@ -71,4 +74,12 @@ function isEnd(player, computer) {
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
+}
+
+function wait(ms) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, ms);
+    });
 }
