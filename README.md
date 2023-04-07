@@ -1,6 +1,6 @@
 # Battleship
 
-Live demo: https://tsoibet.github.io/odin-weather-app/
+Live demo: https://tsoibet.github.io/odin-battleship/
 
 <img width="600" alt="demo" src="https://user-images.githubusercontent.com/59286368/221897170-9b383c50-13f1-468e-92fc-c2b0541eb6e9.png">
 
